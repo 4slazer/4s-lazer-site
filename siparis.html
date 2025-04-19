@@ -58,15 +58,21 @@
 </header>
 
 <div class="container">
-  <h2>Sepetteki Ürünler</h2>
+  <h2>Sepetiniz</h2>
   <ul id="sepetListesi"></ul>
 
-  <h2>Sipariş Bilgileri</h2>
+  <h2>Müşteri Bilgileri</h2>
   <input type="text" id="isim" placeholder="Ad Soyad">
   <input type="tel" id="telefon" placeholder="Telefon Numarası">
   <textarea id="adres" rows="4" placeholder="Teslimat Adresi"></textarea>
 
-  <button onclick="siparisiOnayla()">Siparişi Gönder</button>
+  <h2>Kart Bilgileri</h2>
+  <input type="text" id="kartIsim" placeholder="Kart Üzerindeki İsim">
+  <input type="text" id="kartNumara" placeholder="Kart Numarası (16 hane)">
+  <input type="text" id="kartTarih" placeholder="Son Kullanma Tarihi (AA/YY)">
+  <input type="text" id="kartCVV" placeholder="CVV (3 hane)">
+
+  <button onclick="siparisiOnayla()">Siparişi Ver</button>
 
   <div id="onayMesaji" class="success" style="display:none;"></div>
 </div>
@@ -92,8 +98,12 @@
     const isim = document.getElementById("isim").value.trim();
     const telefon = document.getElementById("telefon").value.trim();
     const adres = document.getElementById("adres").value.trim();
+    const kartIsim = document.getElementById("kartIsim").value.trim();
+    const kartNumara = document.getElementById("kartNumara").value.trim();
+    const kartTarih = document.getElementById("kartTarih").value.trim();
+    const kartCVV = document.getElementById("kartCVV").value.trim();
 
-    if (!isim || !telefon || !adres) {
+    if (!isim || !telefon || !adres || !kartIsim || !kartNumara || !kartTarih || !kartCVV) {
       alert("Lütfen tüm bilgileri doldurun.");
       return;
     }
@@ -102,12 +112,19 @@
       isim,
       telefon,
       adres,
+      kart: {
+        isim: kartIsim,
+        numara: kartNumara,
+        tarih: kartTarih,
+        cvv: kartCVV
+      },
       sepet: urunAdetleri
     };
 
     console.log("📦 Sipariş alındı:", siparis);
+
     document.getElementById("onayMesaji").style.display = "block";
-    document.getElementById("onayMesaji").innerText = "✅ Sipariş başarıyla alındı!";
+    document.getElementById("onayMesaji").innerText = "✅ Sipariş ve ödeme bilgileri başarıyla alındı!";
     localStorage.removeItem("sepet");
   }
 </script>
