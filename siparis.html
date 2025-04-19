@@ -2,10 +2,10 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>4S LAZER - Sipariş</title>
+  <title>4S LAZER - Sipariş ve Ödeme</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; }
-    header { background: #222; color: white; padding: 20px; text-align: center; }
+    body { font-family: Arial, sans-serif; margin: 0; background: #f4f4f4; }
+    header { background-color: #222; color: white; padding: 20px; text-align: center; }
     .container {
       max-width: 800px;
       margin: 30px auto;
@@ -13,6 +13,7 @@
       padding: 30px;
       border-radius: 10px;
     }
+    h2 { margin-top: 30px; }
     input, textarea {
       width: 100%;
       padding: 10px;
@@ -24,7 +25,7 @@
     }
     button {
       width: 100%;
-      padding: 12px;
+      padding: 14px;
       font-size: 16px;
       background-color: #00c8ff;
       color: white;
@@ -46,15 +47,16 @@
       color: green;
       font-weight: bold;
       text-align: center;
-      margin-top: 15px;
+      margin-top: 20px;
       border-radius: 8px;
+      display: none;
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>4S LAZER - Sipariş Ekranı</h1>
+  <h1>4S LAZER - Sipariş ve Ödeme</h1>
 </header>
 
 <div class="container">
@@ -72,9 +74,9 @@
   <input type="text" id="kartTarih" placeholder="Son Kullanma Tarihi (AA/YY)">
   <input type="text" id="kartCVV" placeholder="CVV (3 hane)">
 
-  <button onclick="siparisiOnayla()">Siparişi Ver</button>
+  <button onclick="siparisiTamamla()">Siparişi Tamamla</button>
 
-  <div id="onayMesaji" class="success" style="display:none;"></div>
+  <div id="onayMesaji" class="success">✅ Siparişiniz başarıyla alındı. Teşekkür ederiz!</div>
 </div>
 
 <script>
@@ -94,7 +96,7 @@
     sepetListesi.appendChild(li);
   }
 
-  function siparisiOnayla() {
+  function siparisiTamamla() {
     const isim = document.getElementById("isim").value.trim();
     const telefon = document.getElementById("telefon").value.trim();
     const adres = document.getElementById("adres").value.trim();
@@ -104,7 +106,7 @@
     const kartCVV = document.getElementById("kartCVV").value.trim();
 
     if (!isim || !telefon || !adres || !kartIsim || !kartNumara || !kartTarih || !kartCVV) {
-      alert("Lütfen tüm bilgileri doldurun.");
+      alert("Lütfen tüm alanları eksiksiz doldurun.");
       return;
     }
 
@@ -122,9 +124,7 @@
     };
 
     console.log("📦 Sipariş alındı:", siparis);
-
     document.getElementById("onayMesaji").style.display = "block";
-    document.getElementById("onayMesaji").innerText = "✅ Sipariş ve ödeme bilgileri başarıyla alındı!";
     localStorage.removeItem("sepet");
   }
 </script>
