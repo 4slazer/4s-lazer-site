@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>4S LAZER - Sepetim</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background-color: #f4f4f4; }
+    header { background-color: #222; color: white; padding: 20px; text-align: center; }
+    .container { max-width: 800px; margin: 30px auto; background: white; padding: 30px; border-radius: 10px; }
+    ul { list-style: none; padding: 0; }
+    li {
+      background: #eee;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .toplam { font-weight: bold; text-align: right; margin-top: 20px; font-size: 18px; }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin-top: 30px;
+      font-size: 16px;
+      background-color: #00c8ff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+    }
+    .btn:hover { background-color: #0099cc; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>4S LAZER - Sepetim</h1>
+  </header>
+
+  <div class="container">
+    <ul id="sepetListesi"></ul>
+    <p class="toplam" id="toplamFiyat">Toplam: 0 TL</p>
+    <a href="siparis.html" class="btn">Siparişe Geç</a>
+  </div>
+
+  <script>
+    const sepetListesi = document.getElementById("sepetListesi");
+    const toplamFiyatEl = document.getElementById("toplamFiyat");
+
+    const urunler = JSON.parse(localStorage.getItem("urunler")) || [];
+    const sepet = JSON.parse(localStorage.getItem("sepet")) || [];
+
+    if (sepet.length === 0) {
+      sepetListesi.innerHTML = "<li>Sepetiniz boş.</li>";
+      toplamFiyatEl.innerText = "";
+    } else {
+      let urunAdetleri = {};
+      sepet.forEach(ad => {
+        urunAdetleri[ad] = (urunAdetleri[ad] || 0) + 1;
+      });
+
+      let toplam = 0;
+
+      for (let ad in urunAdetleri) {
+        const adet = urunAdetleri[ad];
+        const urun = urunler.find(u => u.ad === ad);
+        const fiyat = urun ? parseFloat(urun.fiyat) : 0;
+        const araToplam = fiyat * adet;
+        toplam += araToplam;
+
+        const li = document.createElement("li");
+        li.innerHTML = `<span>${ad} (x${adet})</span><span>${araToplam.toFixed(2)} TL</span>`;
+        sepetListesi.appendChild(li);
+      }
+
+      toplamFiyatEl.innerText = "Toplam: " + toplam.toFixed(2) + " TL";
+    }
+  </script>
+
+</body>
+</html>

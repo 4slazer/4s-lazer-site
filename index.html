@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>4S LAZER - Ana Sayfa</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f4f4f4; }
+    header { background: #222; color: white; padding: 20px; text-align: center; position: relative; }
+    .sepet-buton {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      background-color: #00c8ff;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 8px;
+    }
+    .sepet-buton:hover { background-color: #0099cc; }
+    .container { padding: 30px; max-width: 1200px; margin: auto; }
+    .product {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .product img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background: #00c8ff;
+      border: none;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    button:hover { background-color: #0099cc; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>4S LAZER</h1>
+    <a href="sepet.html" class="sepet-buton">🛒 Sepetim</a>
+  </header>
+
+  <div class="container" id="urunlerAlani"></div>
+
+  <script>
+    if (!localStorage.getItem("urunler")) {
+      const ornekUrun = [{
+        ad: "Test Ürünü",
+        aciklama: "Bu bir deneme ürünüdür.",
+        fiyat: "149.99",
+        gorseller: ["https://via.placeholder.com/300x200"]
+      }];
+      localStorage.setItem("urunler", JSON.stringify(ornekUrun));
+    }
+
+    const urunler = JSON.parse(localStorage.getItem("urunler")) || [];
+    const container = document.getElementById("urunlerAlani");
+
+    urunler.forEach((urun) => {
+      const urunDiv = document.createElement("div");
+      urunDiv.className = "product";
+
+      let gorselHTML = "";
+      urun.gorseller.forEach(src => {
+        gorselHTML += `<img src="${src}" alt="${urun.ad}">`;
+      });
+
+      urunDiv.innerHTML = `
+        ${gorselHTML}
+        <h2>${urun.ad}</h2>
+        <p>${urun.aciklama}</p>
+        <p><strong>${urun.fiyat} TL</strong></p>
+        <button onclick="sepeteEkle('${urun.ad}')">Sepete Ekle</button>
+      `;
+
+      container.appendChild(urunDiv);
+    });
+
+    function sepeteEkle(urunAdi) {
+      let sepet = JSON.parse(localStorage.getItem("sepet")) || [];
+      sepet.push(urunAdi);
+      localStorage.setItem("sepet", JSON.stringify(sepet));
+      alert(urunAdi + " sepete eklendi!");
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>4S LAZER - Sipariş</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; }
+    header { background: #222; color: white; padding: 20px; text-align: center; }
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      background-color: #00c8ff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover { background-color: #0099cc; }
+    ul { list-style: none; padding: 0; }
+    li {
+      background: #eee;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+    }
+    .success {
+      background: #dfffdc;
+      padding: 15px;
+      color: green;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 15px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>4S LAZER - Sipariş Ekranı</h1>
+</header>
+
+<div class="container">
+  <h2>Sepetteki Ürünler</h2>
+  <ul id="sepetListesi"></ul>
+
+  <h2>Sipariş Bilgileri</h2>
+  <input type="text" id="isim" placeholder="Ad Soyad">
+  <input type="tel" id="telefon" placeholder="Telefon Numarası">
+  <textarea id="adres" rows="4" placeholder="Teslimat Adresi"></textarea>
+
+  <button onclick="siparisiOnayla()">Siparişi Gönder</button>
+
+  <div id="onayMesaji" class="success" style="display:none;"></div>
+</div>
+
+<script>
+  const sepet = JSON.parse(localStorage.getItem("sepet")) || [];
+  const urunler = JSON.parse(localStorage.getItem("urunler")) || [];
+  const sepetListesi = document.getElementById("sepetListesi");
+  let urunAdetleri = {};
+
+  sepet.forEach(ad => {
+    urunAdetleri[ad] = (urunAdetleri[ad] || 0) + 1;
+  });
+
+  for (let ad in urunAdetleri) {
+    const adet = urunAdetleri[ad];
+    const li = document.createElement("li");
+    li.textContent = `${ad} (x${adet})`;
+    sepetListesi.appendChild(li);
+  }
+
+  function siparisiOnayla() {
+    const isim = document.getElementById("isim").value.trim();
+    const telefon = document.getElementById("telefon").value.trim();
+    const adres = document.getElementById("adres").value.trim();
+
+    if (!isim || !telefon || !adres) {
+      alert("Lütfen tüm bilgileri doldurun.");
+      return;
+    }
+
+    const siparis = {
+      isim,
+      telefon,
+      adres,
+      sepet: urunAdetleri
+    };
+
+    console.log("📦 Sipariş alındı:", siparis);
+    document.getElementById("onayMesaji").style.display = "block";
+    document.getElementById("onayMesaji").innerText = "✅ Sipariş başarıyla alındı!";
+    localStorage.removeItem("sepet");
+  }
+</script>
+
+</body>
+</html>
